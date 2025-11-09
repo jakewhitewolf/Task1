@@ -22,16 +22,24 @@ class Triangle extends Shape {
     void draw(GraphicsContext gc) {
         double[] xs = { x, x + base, x };
         double[] ys = { y, y, y - height };
-
-        gc.setFill(color);
+        gc.setFill(fill);
         gc.fillPolygon(xs, ys, 3);
-
-        gc.setStroke(Color.BLACK);
+        gc.setStroke(getStroke());
+        gc.setLineWidth(getStrokeWidth());
         gc.strokePolygon(xs, ys, 3);
     }
 
     @Override
     public String toString() {
         return "Triangle color is " + super.color + " and area is : " + area();
+    }
+
+    @Override
+    public boolean contains(double mx, double my) {
+        double minX = x;
+        double maxX = x + base;
+        double maxY = y;
+        double minY = y - height;
+        return mx >= minX && mx <= maxX && my >= minY && my <= maxY;
     }
 }

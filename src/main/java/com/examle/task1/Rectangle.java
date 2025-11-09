@@ -17,17 +17,25 @@ class Rectangle extends Shape{
     @Override
     double area() {
 
-        return length*width;   }
+        return length*width;
+    }
 
     @Override
     void draw(GraphicsContext gc) {
-        gc.setFill(color);
+        gc.setFill(fill);
         gc.fillRect(x, y, width, length);
-        gc.setStroke(Color.BLACK);
+        gc.setStroke(getStroke());
+        gc.setLineWidth(getStrokeWidth());
         gc.strokeRect(x, y, width, length);
     }
 
     @Override
     public String toString() {
-        return "Rectangle color is " + super.color +  "and area is : " + area();   }
+        return "Rectangle color is " + super.color +  "and area is : " + area();
+    }
+
+    @Override
+    public boolean contains(double mx, double my) {
+        return mx >= x && mx <= x + width && my >= y && my <= y + length;
+    }
 }
