@@ -4,7 +4,6 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ColorPicker;
-import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 
 import java.util.ArrayList;
@@ -15,6 +14,7 @@ public class MainController {
     @FXML private Canvas canvas;
 
     private final List<Shape> shapes = new ArrayList<>();
+    private final ShapeFactory shapeFactory = new ShapeFactory(); // <-- добавили
 
     private Momento temp;
     private double offsetX;
@@ -27,31 +27,26 @@ public class MainController {
         canvas.setOnMouseReleased(this::onEnd);
     }
 
+    private void addShapeBySides(int numberOfSides, double x, double y) {
+        Shape s = shapeFactory.createShape(numberOfSides, colorpicker.getValue());
+        s.relocate(x, y);
+        shapes.add(s);
+        redraw();
+    }
+
     @FXML
     protected void onRectangleClick() {
-        Rectangle rectangle = new Rectangle(colorpicker.getValue(), 100, 150);
-        rectangle.x = 50;
-        rectangle.y = 30;
-        shapes.add(rectangle);
-        redraw();
+        addShapeBySides(4, 50, 30);
     }
 
     @FXML
     protected void onTriangleClick() {
-        Triangle t = new Triangle(colorpicker.getValue(), 100, 80);
-        t.x = 50;
-        t.y = 150;
-        shapes.add(t);
-        redraw();
+        addShapeBySides(3, 50, 150);
     }
 
     @FXML
     protected void onCircleClick() {
-        Circle c = new Circle(colorpicker.getValue(), 40);
-        c.x = 100;
-        c.y = 100;
-        shapes.add(c);
-        redraw();
+        addShapeBySides(0, 100, 100);
     }
 
     private void redraw() {
@@ -80,7 +75,6 @@ public class MainController {
         }
 
         temp = new Momento(s);
-
         temp.initState();
 
         shapes.remove(s);
@@ -108,7 +102,6 @@ public class MainController {
         s.relocate(e.getX() - offsetX, e.getY() - offsetY);
 
         temp = null;
-
         redraw();
     }
 }
